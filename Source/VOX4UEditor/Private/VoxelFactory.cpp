@@ -225,13 +225,15 @@ UDestructibleMesh* UVoxelFactory::CreateDestructibleMesh(UObject* InParent, FNam
 		DestructibleMesh->AssetImportData = AssetImportData;
 	}
 
-	FRawMesh RawMesh;
-	Vox->CreateOptimizedRawMesh(RawMesh, ImportOption);
 	UMaterialInterface* Material = CreateMaterial(InParent, InName, Flags, Vox);
-	UStaticMesh* RootMesh = NewObject<UStaticMesh>();
-	RootMesh->StaticMaterials.Add(FStaticMaterial(Material));
-	BuildStaticMesh(RootMesh, RawMesh);
-	DestructibleMesh->SourceStaticMesh = RootMesh;
+	{
+		FRawMesh RawMesh;
+		Vox->CreateOptimizedRawMesh(RawMesh, ImportOption);
+		UStaticMesh* RootMesh = NewObject<UStaticMesh>();
+		RootMesh->StaticMaterials.Add(FStaticMaterial(Material));
+		BuildStaticMesh(RootMesh, RawMesh);
+		DestructibleMesh->SourceStaticMesh = RootMesh;
+	}
 
 	TArray<FRawMesh> RawMeshes;
 	Vox->CreateRawMeshes(RawMeshes, ImportOption);
@@ -306,7 +308,7 @@ UVoxel* UVoxelFactory::CreateVoxel(UObject* InParent, FName InName, EObjectFlags
 UStaticMesh* UVoxelFactory::BuildStaticMesh(UStaticMesh* OutStaticMesh, FRawMesh& RawMesh) const
 {
 	check(OutStaticMesh);
-	FStaticMeshSourceModel* StaticMeshSourceModel = new(OutStaticMesh->SourceModels) FStaticMeshSourceModel();
+	FStaticMeshSourceModel* StaticMeshSourceModel = new(OutStaticMesh->GetSourceModels()) FStaticMeshSourceModel();
 	StaticMeshSourceModel->BuildSettings = ImportOption->GetBuildSettings();
 	StaticMeshSourceModel->RawMeshBulkData->SaveRawMesh(RawMesh);
 	TArray<FText> Errors;

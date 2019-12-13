@@ -27,8 +27,8 @@ void UVoxel::PostEditChangeProperty(struct FPropertyChangedEvent& PropertyChange
 void UVoxel::CalcCellBounds()
 {
 	FBoxSphereBounds Bounds(ForceInit);
-	for (const auto* Mesh : this->Mesh.FilterByPredicate([](UStaticMesh* m) { return !!m; })) {
-		Bounds = Bounds + Mesh->GetBounds();
+	for (const auto* RawMesh : this->Mesh.FilterByPredicate([](UStaticMesh* m) { return !!m; })) {
+		Bounds = Bounds + RawMesh->GetBounds();
 	}
 	CellBounds = Bounds;
 }
