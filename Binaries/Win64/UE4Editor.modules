@@ -1,0 +1,8 @@
+{
+	"BuildId": "10570792",
+	"Modules": 
+	{
+		"VOX4U": "UE4Editor-VOX4U.dll",
+		"VOX4UEditor": "UE4Editor-VOX4UEditor.dll"
+	}
+}
